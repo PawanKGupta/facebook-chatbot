@@ -9,7 +9,7 @@ app = Flask(__name__)
 #bot = Bot(PAGE_ACCESS_TOKEN)
 
 
-@app.route('/verify', methods=['GET'])
+@app.route('/webhook', methods=['GET'])
 def verify():
 	# Webhook verification
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
