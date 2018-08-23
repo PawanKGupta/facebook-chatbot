@@ -4,12 +4,12 @@ from pymessenger import Bot
 
 app = Flask(__name__)
 
-PAGE_ACCESS_TOKEN = "EAAH3Y98xri4BAIFQuaUFDfKEp8DN8WJ9k6GzoRMhKI5thpk8gUszJTygzoy3DdxWGfuThp7sLJCGUrFihrY6ObxDcwiKjNI65sW0HVlIaSemS80rCV7cJ29wvSrPuuAT67ZCNQsCBIhFMUKSh4UrdZBoZC5XDa8GSI7ZBrLaZAc72uI8ZBZA4qn"
+PAGE_ACCESS_TOKEN = "EAAH3Y98xri4BAGEDZCOz4J4ua0RTC1vcOV4e0SYMYLCyZA2zhPcP6ejgIT0Lx7mGcs6nZC3NfPIEAv6ZBJ2SafVcde2ALb4tr2n2w3WQAPxevF0X4UVZAdMPk3Q82KEINRCGnJH4WrObUpt7fOKoZBZB3YZCoAdN4cTKFsZCKG8pLSxaqoFUXWo9Y"
 
 bot = Bot(PAGE_ACCESS_TOKEN)
 
 
-@app.route('/webhook', methods=['GET'])
+@app.route('/', methods=['GET'])
 def verify():
 	# Webhook verification
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
@@ -19,7 +19,7 @@ def verify():
     return "Hello world", 200
 
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/', methods=['POST'])
 def webhook():
 	data = request.get_json()
 	log(data)
