@@ -1,6 +1,7 @@
 import os, sys
 from flask import Flask, request
 from pymessenger import Bot
+from utils import get_resp
 
 app = Flask(__name__)
 
@@ -18,7 +19,6 @@ def verify():
         return request.args["hub.challenge"], 200
     return "Hello world", 200
 
-	
 
 @app.route('/', methods=['POST'])
 def webhook():
@@ -40,8 +40,15 @@ def webhook():
 					else:
 						messaging_text = 'no text'
 
-					# Echo
-					response = messaging_text
+					response = None
+					
+					entity, value = get_resp(messaging_text)
+					if entity == "None":
+						response = "Hi! How can i help you?"
+					elif entity == "Problem":
+						response = "Cool! which type of {} is this?".format(value)
+					if response == None:
+						response = "Sorry! I didn't get you."
 					#response = "I'm able to hear you!!"
 					bot.send_text_message(sender_id, response)
 
