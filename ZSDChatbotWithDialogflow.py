@@ -1,22 +1,17 @@
-import codecs
 import json
-import os, sys
+import  sys
 import re
 from threading import Thread
 
-import app2
 import traceback
 
-from flask import Flask, render_template, request
+from flask import Flask, request
 from pymessenger import Bot
 
-from requestDetails import requestDetails
 from viewRequest import view_request
 
 sys.path.append("..")
-from Framework.utils import get_resp
 from Framework.dialogflowConn import apiaiCon
-import getRequestDetail
 
 app = Flask(__name__)
 
