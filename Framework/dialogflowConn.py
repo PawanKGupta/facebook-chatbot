@@ -1,8 +1,7 @@
-import codecs
 import json
 
 import apiai
-import dialogflow
+
 
 # Connect to dialogflow
 def apiaiCon(messaging_text):
