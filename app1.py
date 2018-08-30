@@ -1,3 +1,4 @@
+import codecs
 import json
 import os, sys
 import re
@@ -6,16 +7,20 @@ from threading import Thread
 import app2
 import traceback
 
-from flask import Flask, request
+from flask import Flask, render_template, request
 from pymessenger import Bot
+
+from requestDetails import requestDetails
+from viewRequest import view_request
 
 sys.path.append("..")
 from Framework.utils import get_resp
+from Framework.dialogflowConn import apiaiCon
 import getRequestDetail
 
 app = Flask(__name__)
 
-PAGE_ACCESS_TOKEN = "EAAH3Y98xri4BAPuYyRr9tt75Ybze0gcurypOAakKqUfKZCZAjylQJD7v5dz4zdQ8gy9YybrY9bCKdTmhg3FUtolJvIaYnisCC1uPxLgFo0qplFmodd0HGgAxH1ZCtej5VH613OMUBUM0xxvyM2vcZAlgYl9jMUmDcYS4H3cF8fZCSE24deMXs"
+PAGE_ACCESS_TOKEN = "EAAH3Y98xri4BAOOp1UlkLxQl31cL7A8ZATN0gec84jRiayWsWdlACVguhrzhgVd86ZBlnvRqo2ytCf996OFqfE4gSCgBZApAvW5JLhl3V8QSt0pdBcpXERbHZBk0O9HuA55CDNgWdwNZAUC4GlWDvhbhftIZAZAL9phmyZA4rqJAW2wbMH2YluNt"
 
 bot = Bot(PAGE_ACCESS_TOKEN)
 
@@ -28,7 +33,6 @@ def verify():
             return "Verification token mismatch", 403
         return request.args["hub.challenge"], 200
     return "Hello world", 200
-
 
 
 @app.route('/', methods=['POST'])
@@ -53,94 +57,38 @@ def webhook():
                             "*********************************************************************************" + messaging_text)
                     else:
                         messaging_text = 'no text'
+
+
                     if messaging_text.__contains__("request id") == True or messaging_text.isdigit() == True:
                         if messaging_text.__contains__("request id") == True:
                             req_id = re.findall('\d+', messaging_text)[0]
                         else:
                             req_id = messaging_text
-                        response = view_request(req_id)
+                        reply = view_request(req_id)
                     else:
-                        response = reply(messaging_text)
+                        reply = apiaiCon(messaging_text)
                     details = read_jsondata()
                     if (messaging_text.lower()).__contains__("status") == True:
-                        response = "Status of your request is now {}.".format(details['requestInfo']['status'])
+                        reply = "Status of your request is now {}.".format(details['requestInfo']['status'])
                     if (messaging_text.lower()).__contains__("subject") == True:
                         if details.__contains__("subject"):
-                            response = "Subject of your request is: {}.".format(details['requestInfo']['subject'])
+                            reply = "Subject of your request is: {}.".format(details['requestInfo']['subject'])
                         else:
-                            response = "there is no sbject available for this request."
+                            reply = "there is no sbject available for this request."
                     if (messaging_text.lower()).__contains__("technician") == True:
-                        response = "Assigned technician is {}.".format(details['requestInfo']['technician'])
+                        reply = "Assigned technician is {}.".format(details['requestInfo']['technician'])
                     if (messaging_text.lower()).__contains__("item") == True:
-                        response = "This request is for {} item.".format(details['requestInfo']['item'])
+                        reply = "This request is for {} item.".format(details['requestInfo']['item'])
                     if (messaging_text.lower()).__contains__("created") == True and (
                             messaging_text.lower()).__contains__("date") == True:
-                        response = "This request created at Date: {}".format(details['requestInfo']['createdDate'])
+                        reply = "This request created at Date: {}".format(details['requestInfo']['createdDate'])
                     if (messaging_text.lower()).__contains__("item") == True and (messaging_text.lower()).__contains__(
                             "type") == True:
-                        response = "Item type is: {}.".format(details['requestInfo']['itemType'])
-                    # if messaging_text == "yes":
-                    #      response = "I got you"
+                        reply = "Item type is: {}.".format(details['requestInfo']['itemType'])
 
-                    bot.send_text_message(sender_id, response)
+                    bot.send_text_message(sender_id, reply)
         # return messaging_text
         return "ok", 200
-
-
-def reply(messaging_text):
-    # print(messaging_text)
-    entity, value = get_resp(messaging_text)
-    if entity == "greetings":
-        response = "Hello! Welcome to ZENWorks Service Desk. How can i help you?"
-    elif entity == "problem":
-        response = "Cool! which type of {} is this?".format(value)
-    elif entity == "view_request":
-        response = "Please give your Ticket ID."
-    elif entity == "create_request":
-        response = "I can {} but now i am learning how to create request.".format(value)
-    elif entity == "thanks":
-        response = "Thanks for contacting ZENworks Service Desk chatbot. We always happy to help you. bye bye :)"
-    elif entity == "personal":
-        response = "I'm good. how are you?"
-    else:
-        response = "Sorry! I didn't get you."
-    return response
-
-
-def view_request(req_id):
-    details = getRequestDetail.getRequestDetail().getRequest(req_id)
-    if details == "No Request":
-        response = "Your request does not exist in Database. Please give a valid id!!"
-    elif details == None:
-        response = "Sorry! service desk server is not able to authenticate you."
-    else:
-        # status = details['requestInfo']['status']
-        response = "which information you want about your request?"
-    # print("************************" + str(details))
-    store_jsondata(details)
-    return response
-
-
-def store_jsondata(details):
-    """
-    This function store the REST data in txt format at provided location path
-    Arguments: rest_data
-    Returns: NA
-    """
-    try:
-        path = "D:\\facebookBot\\facebook_chatbot\\temp"
-        if not os.path.exists(path):
-            os.makedirs(path)
-        extension = '.json'
-        file = open(path + "\\request_details" + extension, "w+")
-        json.dump(details, file)
-        # file.write(details)
-        file.close()
-    except Exception as ex:
-        # print("exception" + ex.message)
-        print(traceback.format_exc())
-        return 1
-
 
 def read_jsondata():
     """
@@ -159,7 +107,6 @@ def read_jsondata():
         print(traceback.format_exc())
         return 1
 
-
 def log(message):
     print(message)
     sys.stdout.flush()
@@ -167,9 +114,6 @@ def log(message):
 
 def run_main():
     app.run(debug=True)
-
-# def create_request():
-#     app2.run_main()
 
 
 if __name__ == "__main__":
