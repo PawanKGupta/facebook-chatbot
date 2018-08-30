@@ -1,12 +1,11 @@
-import os, sys
-from threading import Thread
+import sys
 
 from flask import Flask, request
 from pymessenger import Bot
 
 app = Flask(__name__)
 
-PAGE_ACCESS_TOKEN = "EAAH3Y98xri4BAHBb2NvwVBsZA3Q0hxyHp0CbNVf0q93XWvdktsVPtJDugqMG9PKfXlz3i9Qf0jakNqqgwIZB8zAzXKaTfow18W5uFUFwML7y1b52EoSUJwMbnFt1vQprEumTNN5kDBfMZBkS4JaWUY3pjb8jhlj9aZCmIBqAtpIpyvUOZCiwl"
+PAGE_ACCESS_TOKEN = "EAAH3Y98xri4BAHBb2NvwVBsZA3Q0hxyHp0CbNVf0q93XWvdktsVPtJDugqMG9PKfXlz3i9Qf0jakNqqgwIZB8zAzXKaTfow18W5uFUFwML7y1b52EoSUJwMbnFt1vQprEumTNN5kDBfMZBkS4JaWUY3pjb8jhlj9aZCmIBqAtpIpyvUOZCiwl "
 
 bot = Bot(PAGE_ACCESS_TOKEN)
 
@@ -54,13 +53,5 @@ def log(message):
     sys.stdout.flush()
 
 
-def run_main():
+if __name__ == "__main__":
     app.run(debug=True)
-    #child_thread.start()
-
-
-# if __name__ == "__main__":
-#     # messaging_text = app.run(debug=True)
-#
-#     child_thread = Thread(target=run_main())
-#     child_thread.start()
