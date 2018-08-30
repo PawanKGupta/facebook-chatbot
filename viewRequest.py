@@ -18,6 +18,7 @@ def view_request(req_id):
     store_jsondata(details)
     return response
 
+
 def store_jsondata(details):
     """
     This function store the REST data in txt format at provided location path
