@@ -3,7 +3,6 @@ import os, sys
 import re
 from threading import Thread
 
-import app2
 import traceback
 
 from flask import Flask, request
