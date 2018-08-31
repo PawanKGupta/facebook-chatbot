@@ -14,7 +14,7 @@ class Login:
         try:
             sd_ip = srever_ip
             header = {"Content-Type": "application/json"}
-            post_body_data = '{"username":"nsdcustomer1", "password":"novell@123", "ldapSourceId":"1"}'
+            post_body_data = '{"username":"username", "password":"password", "ldapSourceId":"1"}'
             url = "https://" + sd_ip + "/LiveTime/services/v1/auth/login"
 
             rest_data, rest_status = RestFactory().make_post_request(url, post_body_data, header)
