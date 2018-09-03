@@ -14,5 +14,9 @@ def apiaiCon(messaging_text):
     response = request.getresponse()
     obj = json.loads(response.read().decode())
     print(obj)
+    resolvedQuery = obj['result']['resolvedQuery']
     reply = obj['result']['fulfillment']['speech']
-    return reply
+    action = obj['result']['action']
+    #intent = obj['result']['metadata']['intentName']
+
+    return reply, action, resolvedQuery
