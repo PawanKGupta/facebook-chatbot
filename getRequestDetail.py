@@ -13,13 +13,13 @@ logging.basicConfig(level=logging.DEBUG)
 class getRequestDetail:
 
     def getRequest(self, request_id):
-        sd_ip = "10.71.67.39"
+        sd_ip = "10.71.64.192"
         try:
 
             print(sd_ip)
             token = Login.login(sd_ip)
             logging.debug(token)
-            if token != None:
+            if token is not None:
                 header = {"Authorization": "Berear " + token}
                 url = "https://" + sd_ip + "/LiveTime/services/v1/customer/requests/{}".format(request_id)
 
@@ -36,4 +36,4 @@ class getRequestDetail:
         except Exception as ex:
             print(traceback.format_exc())
             return None
-#getRequestDetail.getRequest(self=getRequestDetail)
+# getRequestDetail.getRequest(self=getRequestDetail)
