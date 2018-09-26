@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<script src="test.js"></script>
+
+<style type="text/css">
+
+
+#testserver{
+text-align: left;
+width: 40%;
+ list-style: none;
+}
+
+
+#testclient{
+text-align: right;
+width: 40%;
+ list-style: none;
+}
+
+
+</style>
+</head>
+<body>
+
+<ul id="myList">
+    <h1>{{ name }}</h1>
+
+</ul>
+
+
+<div id="clientMessage"></div>
+
+<textarea id="sendfromclient" rows="2" cols="100" name="comment" form="usrform" placeholder="Enter text here...">
+</textarea>
+<br>
+
+<!--Message which need to be displayed we have to pass -->
+<button onclick="sendMessage('msg');"> Send Message </button>
+
+
+</body>
+
+
+
+
+</html> 
