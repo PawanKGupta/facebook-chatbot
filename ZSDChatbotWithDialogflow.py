@@ -10,14 +10,14 @@ from pymessenger import Bot
 
 from Framework.storeJSONData import store_jsondata
 from viewRequest import view_request
-from createRequest import createRequest
+from CreateRequest import CreateRequest
 
 sys.path.append("..")
-from Framework.dialogflowConn import apiaiCon
+from Framework.dialogflowConn import apiai_con
 
 app = Flask(__name__)
 
-PAGE_ACCESS_TOKEN = "EAAJwcL5QwhMBAPTicqHElt13oCbS7DSDXqOGDz4VlZBZBfYlu66jeb77zh2XHZBFCbuFmFHFjB4ZCJk29TZCnAp47LpIUxJMuB3xuFwg7iwedkaBrTzZCp4jojiO1F8ZAOZCOxaVQ1XfbuzYAOUde6vhLZBe3Kt3AhjPZBvRSLx9Bl5jfdBKvxZAzUEZBLXYlOzpK28ZD"
+PAGE_ACCESS_TOKEN = "EAAJwcL5QwhMBAFKUSlkFcG5sYmEJnMOMMFeZCAKGg2KvSryGhZC1KlhWgav9oC6biTYh3IvpGKN0TuZC1MB0b8BiZBXEki0lgfiZCGuYOwZB7O5zJ8Kb5EnvFoTm4t8r9ofbGvozm8qrckqwhZAEZBppcuWgT4Eit4KPGtPdk3Y1o8R07qRDCzUtggFQqlj3whwZD"
 
 bot = Bot(PAGE_ACCESS_TOKEN)
 
@@ -64,8 +64,8 @@ def webhook():
                     #         req_id = messaging_text
                     #     reply = view_request(req_id)
                     # else:
-                    #     reply, action, resolvedQuery = apiaiCon(messaging_text)
-                    reply, action, resolvedQuery = apiaiCon(messaging_text)
+                    #     reply, action, resolvedQuery = apiai_con(messaging_text)
+                    reply, action, resolvedQuery = apiai_con(messaging_text)
                     if (action == "return-request-id"):
                         req_id = messaging_text
                         reply = view_request(req_id)
@@ -73,7 +73,7 @@ def webhook():
                         details = {"requestAdditionalInfo": {"contactTime": "No Data"}, "requestCustomFieldInfo": [], "requestInfo": {"canApprove": "No Data", "category": "No Data", "classification": "No Data", "closedDate": "No Data", "createdDate": "No Data", "description": "No Data", "hasAttachment": "No Data", "item": "No Data", "itemType": "No Data", "priority": "No Data", "requestNumber": 100086, "requestType": "No Data", "requestor": "No Data", "room": "No Data", "status": "No Data", "subject": "No Data", "technician": "No Data", "urgency": "No Data"}, "requestNotes": []}
                         store_jsondata(details)
                     if (action == "CreateRequest.CreateRequest-yes" and resolvedQuery.lower() == "yes") or (action == "BasicQuestion.BasicQuestion-yes" and resolvedQuery.lower() == "yes"):
-                        req_id = createRequest.create_request("test")
+                        req_id = CreateRequest.create_request("test")
                         #req_id = "987654"
                         reply = "Your request has been raised successfully. This is your request_id : "+str(req_id)
                     elif reply.__contains__("Please describe your") == True:
